@@ -1,20 +1,24 @@
-import { Allow, IsEmail, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Allow, IsEmail } from 'class-validator';
 
 export class UserDto {
   @ApiProperty()
   @Allow()
   id!: number;
 
-  @IsNotEmpty()
   @ApiProperty()
-  name!: string;
+  @Allow()
+  firstName!: string;
 
-  @IsEmail()
   @ApiProperty()
+  @Allow()
+  lastName!: string;
+
+  @ApiProperty()
+  @IsEmail()
   email!: string;
 
-  @Allow()
   @ApiProperty()
-  phone!: string;
+  @Allow()
+  phoneNumber!: string;
 }

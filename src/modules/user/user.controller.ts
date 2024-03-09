@@ -1,15 +1,17 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
   Post,
+  Put,
 } from '@nestjs/common';
+import { VERSION } from '@constants';
 
-import { VERSION } from '../../shared/constants';
+import { CreateUserDto, UpdateUserDto, UserDto } from './dto';
 import { UserService } from './user.service';
-import { CreateUserDto, UserDto } from './dto';
 
 @Controller({
   path: 'users',
@@ -31,5 +33,18 @@ export class UserController {
   @Post()
   createUser(@Body() payload: CreateUserDto): UserDto {
     return this.userService.createUser(payload);
+  }
+
+  @Put(':id')
+  updateUserById(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: UpdateUserDto,
+  ): UserDto {
+    return this.userService.updateUserById(id, payload);
+  }
+
+  @Delete(':id')
+  deleteUserById(@Param('id', ParseIntPipe) id: number): UserDto {
+    return this.userService.delete(id);
   }
 }

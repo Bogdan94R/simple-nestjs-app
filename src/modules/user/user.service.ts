@@ -1,18 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto, UserDto } from './dto';
-import { USERS } from './mock-users';
+
+import { CreateUserDto, UpdateUserDto, UserDto } from './dto';
 
 @Injectable()
 export class UserService {
-  private readonly users: Array<CreateUserDto & { id: number }> = USERS;
+  private users: Array<CreateUserDto & { id: number }> = [];
 
   getUsers(): UserDto[] {
     return this.users.map((user) => {
       const userDto = new UserDto();
       userDto.id = user.id;
-      userDto.name = user.name;
+      userDto.firstName = user.firstName;
+      userDto.lastName = user.lastName;
       userDto.email = user.email;
-      userDto.phone = user.phone;
+      userDto.phoneNumber = user.phoneNumber;
       return userDto;
     });
   }
@@ -29,5 +30,25 @@ export class UserService {
     const id = new Date().getTime();
     this.users.push({ id, ...payload });
     return this.getUserById(id);
+  }
+
+  updateUserById(id: number, payload: UpdateUserDto): UserDto {
+    this.users = this.getUsers().map((user) => {
+      if (user.id === id) {
+        return {
+          ...user,
+          ...payload,
+        };
+      }
+      return user;
+    }) as Array<CreateUserDto & { id: number }>;
+
+    return this.getUserById(id);
+  }
+
+  delete(id: number): UserDto {
+    const deletedUser = this.getUserById(id);
+    this.users = this.users.filter((user) => user.id !== id);
+    return deletedUser;
   }
 }

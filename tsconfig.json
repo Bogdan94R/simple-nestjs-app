@@ -20,6 +20,11 @@
     "strictPropertyInitialization": true,
     "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@db-prisma-client": ["src/prisma/generated/client/index"],
+      "@db-prisma": ["src/prisma/index"],
+      "@constants": ["src/shared/constants/index"]
+    }
   }
 }
