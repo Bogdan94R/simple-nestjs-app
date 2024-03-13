@@ -5,20 +5,27 @@
 ## Installation
 
 ```bash
+# install dependencies
 $ npm install
+# init prisma client
+$ npx prisma generate
 ```
 
-## Running the app
+## Setup environment
+
+- create .env
+- copy all variables from .env.example to .env
+- fill all variables for .env
+
+## Run app for development
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
+# run database
+$ docker-compose up
+# run migrations
+$ npx prisma migrate deploy
+# run app in development using watch mode (for build process enabled SWC)
 $ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
 ## License
