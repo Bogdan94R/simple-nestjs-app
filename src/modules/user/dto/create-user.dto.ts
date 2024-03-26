@@ -3,7 +3,11 @@ import { IsString, MinLength } from 'class-validator';
 
 import { UserDto } from './user.dto';
 
-export class CreateUserDto extends OmitType(UserDto, ['id'] as const) {
+export class CreateUserDto extends OmitType(UserDto, [
+  'id',
+  'createdAt',
+  'updatedAt',
+] as const) {
   @IsString()
   @MinLength(6)
   @ApiProperty()
