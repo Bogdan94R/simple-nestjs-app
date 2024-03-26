@@ -4,22 +4,15 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
+import { PrismaService } from '@db-prisma';
 import { PaginatedResult, paginationHelper } from '@utils';
+import { USER_SELECT } from '@constants';
 
 import { UpdateUserDto, UserDto } from './dto';
-import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class UserService {
-  private readonly userSelect = {
-    id: true,
-    email: true,
-    firstName: true,
-    lastName: true,
-    createdAt: true,
-    updatedAt: true,
-    password: false,
-  };
+  private readonly userSelect = USER_SELECT;
   constructor(private readonly prisma: PrismaService) {}
 
   getUsers(page: number): Promise<PaginatedResult<UserDto>> {
