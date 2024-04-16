@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from '@db-prisma';
+import { Prisma } from '@db-prisma-client';
+
 import { PaginatedResult, paginationHelper } from '@utils';
 
 import { CategoryDto, CreateCategoryDto, UpdateCategoryDto } from './dto';
@@ -54,7 +56,14 @@ export class CategoryService {
     try {
       return await this.prisma.category.delete({ where: { id } });
     } catch (e) {
-      throw new NotFoundException();
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new NotFoundException();
+      }
+
+      throw e;
     }
   }
 }
