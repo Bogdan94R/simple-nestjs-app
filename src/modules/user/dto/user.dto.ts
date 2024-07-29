@@ -1,24 +1,29 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Allow, IsEmail } from 'class-validator';
 
-export class UserDto {
+import { User } from '@db-prisma-client';
+
+export class UserDto implements User {
   @ApiProperty()
-  @Allow()
   id!: number;
 
   @ApiProperty()
   @Allow()
-  firstName!: string;
+  firstName!: string | null;
 
   @ApiProperty()
   @Allow()
-  lastName!: string;
+  lastName!: string | null;
 
   @ApiProperty()
   @IsEmail()
   email!: string;
 
   @ApiProperty()
-  @Allow()
-  phoneNumber!: string;
+  createdAt!: Date;
+
+  @ApiProperty()
+  updatedAt!: Date;
+
+  password!: string;
 }

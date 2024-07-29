@@ -1,1 +1,1 @@
-export * from './version.constant';
+export * from './user-select.constant';
