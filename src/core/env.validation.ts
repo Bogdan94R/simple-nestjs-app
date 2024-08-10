@@ -19,6 +19,12 @@ class EnvironmentVariables {
 
   @IsNotEmpty()
   DATABASE_URL!: string;
+
+  @IsNotEmpty()
+  JWT_SECRET!: string;
+
+  @IsNotEmpty()
+  JWT_EXPIRATION_TIME!: string;
 }
 
 export function validate(

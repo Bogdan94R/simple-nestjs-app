@@ -1,14 +1,17 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
-  NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common';
+import { User } from '@db-prisma-client';
 
 import { PrismaService } from '@db-prisma';
+import { EQueryErrorCode } from '@db-prisma/constants';
 import { PaginatedResult, paginationHelper } from '@utils';
 import { USER_SELECT } from '@constants';
-
-import { UpdateUserDto, UserDto } from './dto';
+import { CreateUserDto, UpdateUserDto, UserDto } from './dto';
+import { hash } from '../../shared/utils/bcrypt.util';
 
 @Injectable()
 export class UserService {
@@ -34,17 +37,26 @@ export class UserService {
     );
   }
 
-  async getUser(where: { id?: number; email?: string }): Promise<UserDto> {
-    const user = await this.prisma.user.findFirst({
-      select: this.userSelect,
+  async getUser(
+    where: { id?: number; email?: string },
+    select?: typeof USER_SELECT,
+  ): Promise<User | null> {
+    return this.prisma.user.findFirst({
+      select: select ? select : this.userSelect,
       where,
     });
+  }
 
-    if (!user) {
-      throw new NotFoundException();
+  async createUser(user: CreateUserDto): Promise<User> {
+    user.password = await hash(user.password);
+    try {
+      return await this.prisma.user.create({ data: user });
+    } catch (e) {
+      if (e.code === EQueryErrorCode.UniqueConstraintViolation) {
+        throw new BadRequestException();
+      }
+      throw new InternalServerErrorException(e);
     }
-
-    return user;
   }
 
   // TODO: add controller for update user profile

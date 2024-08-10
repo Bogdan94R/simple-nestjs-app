@@ -24,6 +24,7 @@
     "paths": {
       "@db-prisma-client": ["src/prisma/generated/client/index"],
       "@db-prisma": ["src/prisma/index"],
+      "@db-prisma/constants": ["src/prisma/constants/index"],
       "@constants": ["src/shared/constants/index"],
       "@utils": ["src/shared/utils/index"]
     }
